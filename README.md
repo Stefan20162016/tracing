@@ -1,28 +1,33 @@
 # Kernel Tracing
 
-(base on kernel 5.6.6)
+(based on kernel 5.6.6)
 
-There are a few (complementary) tracing tools, purely built-in (Ftrace) or built-in with external tool but shipped with the kernel (perf), or combined with the in-kernel BPF capabilities (bpftrace, BCC). Overall quite confusing because every tool can use most or a subset of the underlying tracing functionality (function tracer, kprobes, kretprobes, uprobes, uretprobes, USDT). As a quick hint, bpftrace is easy to learn (simple syntax) and quite powerful (in-kernel aggregation using BPF). See the short examples in the [Introduction](tracing-1.md) and [bpftrace section](tracing-.md).
+There are a few (complementary) tracing tools, purely built-in (Ftrace) or built-in with external tool but shipped with the kernel (perf), or combined with the in-kernel BPF capabilities (bpftrace, BCC). Overall quite confusing because every tool can use most or a subset of the underlying tracing functionality (function tracer, kprobes, kretprobes, uprobes, uretprobes, USDT). As a quick hint, bpftrace is easy to learn (simple syntax) and quite powerful (in-kernel aggregation using BPF). See the short examples in the [Introduction](tracing-intro.md) and [bpftrace section](tracing-2_2.md).
 
-Sections explain tracing functionality and than how to use it. With short kernel code snippets. See kernel Documentation/trace/* and/or kernel code for exact implementation.
+The sections explain tracing functionality and than how to use it with short kernel code snippets. See kernel Documentation/trace/* and/or kernel code for exact implementation.
 
 
 
 1. [Introduction](tracing-intro.md)
 
 * Part I: tracing infrastructure
-1. [function tracer / ftrace](tracing-.md)
-1. [tracepoints](tracing-.md)
-1. [kprobes, kretprobes, uprobes, uretprobes](tracing-.md)
-1. [USDT](tracing-.md)
-1. [perf_events()](tracing-.md)
+
+1. [function tracer / ftrace](tracing-1_1.md)
+1. [tracepoints](tracing-1_2.md)
+1. [kprobes, kretprobes, uprobes, uretprobes](tracing-1_3.md)
+1. [USDT](tracing-1_4.md)
+1. [perf_events()](tracing-1_5.md)
 
 * Part II: tracing tools
+
 1. [/sys/kernel/debug/tracing/](tracing-2_1.md)
-1. [perf_events(), ./perf](tracing-.md)
-1. [LTTng SystemTap?](tracing-.md)
-1. [bpftrace](tracing-.md)
-1. [BCC](tracing-.md)
+1. [eBPF](tracing-2_2.md)
+1. [bpftrace](tracing-2_3.md)
+1. [BCC](tracing-2_4.md)
+1. [perf_events(), ./perf](tracing-2_5.md)
+1. [LTTng SystemTap?](tracing-2_6.md)
+
+
 
 
 

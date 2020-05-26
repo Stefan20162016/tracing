@@ -1,11 +1,12 @@
-tracing Part II: subsection "/sys/kernel/debu/tracing/"
+tracing Part II: subsection "/sys/kernel/debug/tracing/"
 ================================================================================
 ## intro
 
-The "easiest" way to use tracing because you don't need any tools is via tracefs, normally "tracefs" is mounted on /sys/kernel/debug/tracing/ [see end of this document for notes on each file/directory](#tracing-files). One prominent use case is trace_printk() which uses the tracing-kernel-ring-buffer instead of flooding your console or serial port(for a long time). MagicKey SysRq+z also prints the trace ring buffer.
+First, it's the "easiest" way to use tracing because you don't need any tools is via tracefs, normally "tracefs" is mounted on /sys/kernel/debug/tracing/ [see end of this document for notes on each file/directory](#tracing-files). One prominent use case is trace_printk() which uses the tracing-kernel-ring-buffer instead of flooding your console or serial port(for a long time). MagicKey SysRq+z also prints the trace ring buffer.
 
+Second, other tools also leave their "traces" in `/sys/kernel/debug/tracing` either in automatically created new files or directories. It's *THE* central kernel tracing facility.
 
-different "tracers" all in one directory /sys/kernel/debug/tracing/
+Different "tracers" all in one directory /sys/kernel/debug/tracing/:
 
 * [function tracer, ftrace](#ftrace): activate with current_tracer file
 
@@ -298,7 +299,7 @@ print fmt: "filename=%s pid=%d old_pid=%d", __get_str(filename), REC->pid, REC->
 Note: `print fmt` is default string appearing in trace output
 
 
-Limit to `wget`:
+Limit output to `wget`:
 ```
 echo filename == "/usr/bin/wget" > /sys/kernel/debug/tracing/events/sched/
 sched_process_exec/filter
@@ -434,8 +435,11 @@ echo 1 > events/uprobes/p_bash_0xad900/enable
 1. <a name="ftrace2"></a> Ftrace: "Debugging the kernel using Ftrace - part 2" (https://lwn.net/Articles/366796/)
 
 1. <a name="documentation-ftrace"></a> Kernel ftrace Documentation (https://github.com/torvalds/linux/blob/7111951b8d4973bda27ff663f2cf18b663d15b48/Documentation/trace/ftrace.rst)
+
 1. <a name="documentation-tracepoints"></a> Kernel Tracepoints a.k.a. events Documentation (https://github.com/torvalds/linux/blob/7111951b8d4973bda27ff663f2cf18b663d15b48/Documentation/trace/events.rst)
+
 1. <a name="documentation-kprobes"></a> Kernel Kprobes Documentation (https://github.com/torvalds/linux/blob/7111951b8d4973bda27ff663f2cf18b663d15b48/Documentation/trace/kprobetrace.rst)
+
 1. <a name="documentation-uprobes"></a> Kernel Uprobes Documentation (https://github.com/torvalds/linux/blob/7111951b8d4973bda27ff663f2cf18b663d15b48/Documentation/trace/uprobetracer.rst)
 
 
