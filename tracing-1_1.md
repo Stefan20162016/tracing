@@ -53,7 +53,7 @@ Basic idea:
 1. <a name="LWN_trace_event3"></a> "Using the TRACE_EVENT() macro (Part 3)" https://lwn.net/Articles/383362/ 
 1. <a name="tracepoint.h"></a> Linux Kernel: include/linux/tracepoint.h https://github.com/torvalds/linux/blob/7111951b8d4973bda27ff663f2cf18b663d15b48/include/linux/tracepoint.h#L413
 1. <a name="sched.h"></a> Linux Kernel: include/trace/events/sched.h https://github.com/torvalds/linux/blob/7111951b8d4973bda27ff663f2cf18b663d15b48/include/trace/events/sched.h#L138
-1. <a name="core.c"></a> Linux Kernel: kernel/sched/core.c https://github.com/torvalds/linux/blob/7111951b8d4973bda27ff663f2cf18b663d15b48/kernel/sched/core.c#L4077
-1. <a name="trace_sched_switch.c"></a> Linux Kernel: kernel/trace/trace_sched_switch.c https://github.com/torvalds/linux/blob/7111951b8d4973bda27ff663f2cf18b663d15b48/kernel/trace/trace_sched_switch.c#L68
+1. <a name="core.c"></a> kernel/sched/core.c https://github.com/torvalds/linux/blob/7111951b8d4973bda27ff663f2cf18b663d15b48/kernel/sched/core.c#L4077
+1. <a name="trace_sched_switch.c"></a> `kernel/trace/trace_sched_switch.c` https://github.com/torvalds/linux/blob/7111951b8d4973bda27ff663f2cf18b663d15b48/kernel/trace/trace_sched_switch.c#L68
 
 
