@@ -10,9 +10,9 @@ Since 2008 2.6.27, ftrace histogram triggers 2016,2017
 
 A [LWN article fromm 2008](#lwn0) describes ftraces the following:
 
-```
-The ftrace (which stands for "function tracer") framework is one of the many improvements to come out of the realtime effort. Unlike SystemTap, it does not attempt to be a comprehensive, scriptable facility; ftrace is much more oriented toward simplicity. There is a set of virtual files in a debugfs directory which can be used to enable specific tracers and see the results. The function tracer after which ftrace is named simply outputs each function called in the kernel as it happens. Other tracers look at wakeup latency, events enabling and disabling interrupts and preemption, task switches, etc. As one might expect, the available information is best suited for developers working on improving realtime response in Linux. The ftrace framework makes it easy to add new tracers, though, so chances are good that other types of events will be added as developers think of things they would like to look at. 
-```
+
+> The ftrace (which stands for "function tracer") framework is one of the many improvements to come out of the realtime effort. Unlike SystemTap, it does not attempt to be a comprehensive, scriptable facility; ftrace is much more oriented toward simplicity. There is a set of virtual files in a debugfs directory which can be used to enable specific tracers and see the results. The function tracer after which ftrace is named simply outputs each function called in the kernel as it happens. Other tracers look at wakeup latency, events enabling and disabling interrupts and preemption, task switches, etc. As one might expect, the available information is best suited for developers working on improving realtime response in Linux. The ftrace framework makes it easy to add new tracers, though, so chances are good that other types of events will be added as developers think of things they would like to look at. 
+
 
 Ftrace started the "tracing" directory in the debugfs virtual filesystem. Most basic operation is to print every(!) called kernel function. It has control files and output files, see Part II ftrace for details.
 
