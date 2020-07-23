@@ -199,6 +199,7 @@ output:"            <...>-2929  [007] .... 84259.898198: tracing_mark_write: hi"
 Note: DO NOT clear the ftrace filter now. Enter `echo nofunc_stack_trace > trace_options` first. 
 
 Use more filters to limit output (see available_filter_functions):
+
 ```bash
 # echo 'futex_*' > set_ftrace_filter 
 # cat set_ftrace_filter 
@@ -218,6 +219,10 @@ futex_exec_release
 futex_exit_release
 
 ```
+
+As explained in the LWN article ["Secrets of the Ftrace function tracer"](#ftracesecrets) using a command like `grep sched available_filter_functions > set_ftrace_filter` which adds hundreds of filter to the `set_ftrace_filter` file will result in millions of string comparisons and might take a second or two.
+
+
 Now the output of a single `ls` is more reasonable: 8 stack traces, 89 lines with header:
 ```bash
 # tracer: function
@@ -279,6 +284,7 @@ or
 Can dis-/enable whole subsystem with enable files in events/<subsystem>/.
 
 Can filter on available parameters (see `format` files).
+
 ```
 root@vbox:/sys/kernel/debug/tracing/events/sched/sched_process_exec# cat format
 name: sched_process_exec
@@ -429,10 +435,34 @@ echo 1 > events/uprobes/p_bash_0xad900/enable
 # echo > uprobe_events # clear
 ```
 
+
+[Function profiling](#ftracesecrets) is also possible. Copied from LWN Ftrace: "Secrets of the Ftrace function tracer" (https://lwn.net/Articles/370423/):
+
+```
+   [tracing]# echo nop > current_tracer
+   [tracing]# echo 1 > function_profile_enabled
+   [tracing]# cat trace_stat/function0 |head
+     Function                               Hit    Time            Avg
+     --------                               ---    ----            ---
+     schedule                             22943    1994458706 us     86931.03 us 
+     poll_schedule_timeout                 8683    1429165515 us     164593.5 us 
+     schedule_hrtimeout_range              8638    1429155793 us     165449.8 us 
+     sys_poll                             12366    875206110 us     70775.19 us 
+     do_sys_poll                          12367    875136511 us     70763.84 us 
+     compat_sys_select                     3395    527531945 us     155384.9 us 
+     compat_core_sys_select                3395    527503300 us     155376.5 us 
+     do_select                             3395    527477553 us     155368.9 us 
+
+```
+
+(Also interesting that ftrace once led to destroyed Intel e1000 adapters:(https://lwn.net/Articles/304105/). See for LWN-ftrace-list: (https://lwn.net/Kernel/Index/#Ftrace) )
+
 ## Links:
 
-1. <a name="ftrace1"></a> Ftrace: "Debugging the kernel using Ftrace - part 1" (https://lwn.net/Articles/365835/)
-1. <a name="ftrace2"></a> Ftrace: "Debugging the kernel using Ftrace - part 2" (https://lwn.net/Articles/366796/)
+1. <a name="ftrace1"></a> LWN Ftrace: "Debugging the kernel using Ftrace - part 1" (https://lwn.net/Articles/365835/)
+1. <a name="ftrace2"></a> LWN Ftrace: "Debugging the kernel using Ftrace - part 2" (https://lwn.net/Articles/366796/)
+
+1. <a name="ftracesecrets"></a> LWN Ftrace: "Secrets of the Ftrace function tracer" (https://lwn.net/Articles/370423/)
 
 1. <a name="documentation-ftrace"></a> Kernel ftrace Documentation (https://github.com/torvalds/linux/blob/7111951b8d4973bda27ff663f2cf18b663d15b48/Documentation/trace/ftrace.rst)
 
