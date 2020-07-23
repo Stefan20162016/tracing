@@ -28,7 +28,7 @@ See section `HAVE_FUNCTION_TRACER` for details.
 
 The call to mcount() in every function checks if you want to trace it and does the trace output, else just returns. If not in use the call will be replaced with a `NOP` (so you can selectively enable functions to trace). After compiling the kernel the `scripts/recordmcount` does this postprocessing. You will see the `NOP` "no-performance-penalty" trick again in the `tracepoint` section. 
 
-
+See [part II section 1.](tracing-2_1.md) how to use the ftrace infra in `/sys/kernel/debug/tracing/`.
 
 
 ## Links:

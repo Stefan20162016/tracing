@@ -11,7 +11,7 @@ This is more a practical tutorial and the sections explain tracing functionality
 
 1. [Introduction](tracing-intro.md)
 
-* Part I: tracing infrastructure
+* Theoretical Part I: tracing infrastructure
 
 1. [function tracer / ftrace](tracing-1_1.md)
 1. [tracepoints](tracing-1_2.md)
@@ -19,7 +19,7 @@ This is more a practical tutorial and the sections explain tracing functionality
 1. [USDT](tracing-1_4.md)
 1. [perf_events()](tracing-1_5.md)
 
-* Part II: tracing tools
+* Practical Part II: tracing tools
 
 1. [ftrace: /sys/kernel/debug/tracing/](tracing-2_1.md)
 1. [eBPF](tracing-2_2.md)
