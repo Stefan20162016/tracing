@@ -3,6 +3,7 @@
 notes:
 
     - g++ -O3 -std=c++17 -pthread main.cpp -o main && time sudo ./main 8 / # 1.3 sec
+    use -mno-omit-leaf-frame-pointer -fno-omit-frame-pointer for stack traces
 time ./main 8 /home/bm # 0.4sec
 threads are not synchonized or based on condition variable if work==more directories are available,
 just stealing from the global std::string vectors holding the directory names.
@@ -23,6 +24,19 @@ e.g. use `iostat -x -p nvme0n1p1 -h 1` to find sweet spot
 mpstat -P ALL 1
 vmstat 1
 vmstat -m 1  | egrep "dentry|inode_cache" # print slabs
+
+read-ahead settings, scheduler, etc: https://cromwell-intl.com/open-source/performance-tuning/disks.html
+https://wiki.mikejung.biz/Ubuntu_Performance_Tuning
+
+echo kyber > /sys/block/sda/queue/scheduler
+echo 512 > /sys/block/sda/queue/nr_requests
+echo 0 > /sys/block/sda/queue/read_ahead_kb
+
+test filesystem on samsung nvme:
+128.000 directories
+1.350.000 files
+209GB
+time: 5 sec with 64-128 threads
 */
 
 
@@ -86,17 +100,17 @@ public:
                 working();
             }
             else{
-#ifdef DEBUG                
+                #ifdef DEBUG                
                 {std::lock_guard<std::mutex> lock(coutmtx);
                  std::cout << worker_id << ": EMPTY constructor string." << std::endl;}
-#endif            
+                #endif            
 
                 for(int i=0; i< 13; i++){    // try _ times to get some work
-#ifndef DONTSLEEP                
+                    #ifndef DONTSLEEP                
                     std::this_thread::sleep_for(std::chrono::milliseconds(2 + worker_id%15)); 
                     // helps to balance work for initially unemployed threads
                     // check the filename_array_of_vectors[i].size() output at the end for even distribution
-#endif                    
+                    #endif                    
                     working(); 
                 }
             }
@@ -440,20 +454,20 @@ int main(int argc, char* argv[]) {
     std::cout << "starting_dirs: " << starting_dirs << " nthreads " << n_threads  << std::endl;
     #endif
 
-#ifdef DEBUG
+    #ifdef DEBUG
     std::cout << "global_dirs size: " << starting_dirs << std::endl;
-#endif    
+    #endif    
 
-#ifdef DEBUG
+    #ifdef DEBUG
     if(starting_dirs < n_threads){
         std::cout << "less dirs than threads to begin with" << std::endl;
     }
     else {
         std::cout << "more or equal dirs as threads to begin with" << std::endl;
     }
-#endif
+    #endif
 
-// re-arrange loop ?
+    // re-arrange loop ?
     for(int i=0; i < n_threads; ++i){
         if(starting_dirs < n_threads){
             if(i < starting_dirs){
@@ -573,10 +587,10 @@ int main(int argc, char* argv[]) {
     
     dest.close();
     
-#ifndef PRINTFILENAMES    
+    #ifndef PRINTFILENAMES    
     std::cout << "filename_array_of_vectors.size(): " << filename_array_of_vectors.size() << std::endl;
     std::cout << "number of files: file_sum: " << file_sum << std::endl;
-#endif
+    #endif
 
 } // end int main(int argc, char* argv[])
 
