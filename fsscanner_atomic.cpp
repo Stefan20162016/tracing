@@ -94,7 +94,7 @@ std::vector<std::string> global_directories(0);
 std::vector<std::exception_ptr> global_exceptions;
 std::mutex coutmtx, global_exceptmutex; // mutex for std::cout and for exceptions thrown in threads
 
-#define NR_ATOMICS 8
+#define NR_ATOMICS 128
 std::array<std::atomic<int>, NR_ATOMICS> atomic_running_threads;
 
 int global_residual_dirs=-1;
@@ -116,7 +116,7 @@ public:
                 tls_path=start_with_path;
                 do_linear_descent();
                 #ifndef DONTSLEEP                
-                std::this_thread::sleep_for(std::chrono::milliseconds(1 + worker_id%8)); 
+                std::this_thread::sleep_for(std::chrono::milliseconds(0 + worker_id%8)); 
                 #endif  
                 working();  
             }
@@ -129,7 +129,7 @@ public:
                 // ::sleep_for helps to balance work for initially unemployed threads
                 // check the filename_array_of_vectors[i].size() output at the end for even distribution and/or DIE_DEBUG
                 #ifndef DONTSLEEP                
-                std::this_thread::sleep_for(std::chrono::milliseconds(11 + worker_id%17));     
+                std::this_thread::sleep_for(std::chrono::milliseconds(0 + worker_id%17));     
                 #endif                    
                 working(); 
             }
@@ -162,7 +162,7 @@ public:
         int retry_count = RETRY_COUNT;
     check_again:
         int proceed_new=0;
-        #define NR_OF_ROUNDS 2 // a few or just one round works equally well
+        #define NR_OF_ROUNDS 1 // a few or just one round works equally well
         for(int i=0; proceed_new == 0 && i < NR_OF_ROUNDS*NR_GLOBAL_DIRECTORIES_MUTEXES; i++){  
             int start_with_i=(worker_id+i)%NR_GLOBAL_DIRECTORIES_MUTEXES; // start with own id-vector
             std::lock_guard<std::mutex> lock(global_directories_mutexes[start_with_i]);
@@ -198,7 +198,7 @@ public:
 
     end_label:  
         if(retry_count-- > 0){
-            std::this_thread::sleep_for(std::chrono::microseconds( 1251 ));
+            std::this_thread::sleep_for(std::chrono::microseconds( 510 ));
             //std::this_thread::yield();
             goto check_again;
         }
@@ -221,17 +221,17 @@ public:
             }
             //
             
-            //auto end_time = std::chrono::high_resolution_clock::now();
-            //std::chrono::nanoseconds ns = end_time-starting_time;
-            //auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(ns).count();
+            auto end_time = std::chrono::high_resolution_clock::now();
+            std::chrono::nanoseconds ns = end_time-starting_time;
+            auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(ns).count();
             //{std::lock_guard<std::mutex> lock(coutmtx);
-            // std::cout << "worker: " << worker_id << " FINALLY DIED after: " << elapsed << " microseconds" << //std::endl;
+            // std::cout << "worker: " << worker_id << " FINALLY DIED after: " << elapsed << " microseconds" << std::endl;
             //}
 
-            //{ std::lock_guard<std::mutex> lock(running_times_mutex);
-            //running_times.push_back( static_cast<uint64_t>(elapsed) );
-            //}
-            //
+            { std::lock_guard<std::mutex> lock(running_times_mutex);
+            running_times.push_back( static_cast<uint64_t>(elapsed) );
+            }
+            
             
             if(false){
                 for(int i=0; i<NR_ATOMICS; i++){
@@ -700,8 +700,8 @@ int main(int argc, char* argv[]) {
     if(minmax != std::make_pair(running_times.begin(),running_times.begin() ) ){
         std::cout << "max: " << *minmax.second << " min: " << *minmax.first << std::endl;
     }
-    //auto dif = *minmax.second - *minmax.first;
-    //std::cout << "difference(microsecs) between max and min: " << dif << " millisecs: " << dif/1000 << std::endl;
+    auto dif = *minmax.second - *minmax.first;
+    std::cout << "difference(microsecs) between max and min: " << dif << " millisecs: " << dif/1000 << std::endl;
 
 } // end int main(int argc, char* argv[])
 
