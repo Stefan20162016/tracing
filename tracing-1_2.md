@@ -1,7 +1,7 @@
 tracing Part I subsection 2:  Tracepoints
 ================================================================================
 
-Tracepoints: kernel 2.6.28 or 2.6.32 ~2009  started as *kernel markers* ?
+Tracepoints: kernel 2.6.28 or 2.6.32 ~2009  started as *kernel markers*.
 
 From the Documentation: https://github.com/torvalds/linux/blob/v5.6/Documentation/trace/tracepoints.rst we learn that tracepoints are statically defined points in the kernel you can trace:
 
@@ -33,7 +33,7 @@ They can be used for tracing and performance accounting.
 Tracepoints can be used in the "ftrace" directory /sys/kernel/debug/tracing, perf and via BPF tools.
 
 Tracepoints are sorted by subsytem:eventname, following the example in the comments in [include/linux/tracepoint.h](#tracepoint.h) we'll look at `tracepoint:sched:sched_switch`. It's using the  TRACE_EVENT(...) macro mentioned at the end of https://github.com/torvalds/linux/blob/v5.6/Documentation/trace/tracepoints.rst and which is also explained in an [LWN Article series part1-3](#LWN_trace_event). See especially part3 for a silly-demo-module which adds a silly-tracepoint.
-(note had to change one line in the silly Makefile to compile without error (kernel 5.4.34, ubuntu 20.04) : `kernel_modules: \
+(note: had to change one line in the silly Makefile to compile without error (kernel 5.4.34, ubuntu 20.04) : `kernel_modules: \
 	$(MAKE) -C $(KDIR) M=${PWD} EXTRA_CFLAGS='${EXTRA_CFLAGS}' modules`).
 
 See https://github.com/torvalds/linux/tree/master/include/trace/events where all the tracepoints are defined in the *.h files.

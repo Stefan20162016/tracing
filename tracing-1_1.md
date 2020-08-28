@@ -24,7 +24,7 @@ From [Documentation/trace/ftrace-design.rst](#ftrace-design)
 echo 'main(){}' | gcc -x c -S -o - - -pg | grep mcount
 	        call    mcount
 ```
-See section `HAVE_FUNCTION_TRACER` for details.
+See section `HAVE_FUNCTION_TRACER` in `ftrace-desing.rst` for details.
 
 The call to mcount() in every function checks if you want to trace it and does the trace output, else just returns. If not in use the call will be replaced with a `NOP` (so you can selectively enable functions to trace). After compiling the kernel the `scripts/recordmcount` does this postprocessing. You will see the `NOP` "no-performance-penalty" trick again in the `tracepoint` section. 
 
@@ -35,5 +35,3 @@ See [part II section 1.](tracing-2_1.md) how to use the ftrace infra in `/sys/ke
 1. <a name="lwn0"></a> LWN 2008: "Tracing: no shortage of options" (https://lwn.net/Articles/291091/)
 1. <a name="lwn1"></a> LWN 2009: "A look at ftrace"      (https://lwn.net/Articles/322666/)
 1. <a name="ftrace-design"></a> Kernel: Documentation/trace/ftrace-design.rst     (https://github.com/torvalds/linux/blob/7111951b8d4973bda27ff663f2cf18b663d15b48/Documentation/trace/ftrace-design.rst)
-1. <a name=""></a>     ()
-1. <a name=""></a>     ()

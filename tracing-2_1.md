@@ -2,7 +2,7 @@ tracing Part II: subsection "/sys/kernel/debug/tracing/"
 ================================================================================
 ## intro
 
-First, it's the "easiest" way to use tracing because you don't need any tools is via tracefs, normally "tracefs" is mounted on /sys/kernel/debug/tracing/ [see end of this document for notes on each file/directory](#tracing-files). One prominent use case is trace_printk() which uses the tracing-kernel-ring-buffer instead of flooding your console or serial port(for a long time). MagicKey SysRq+z also prints the trace ring buffer.
+First, it's the "easiest" way to use tracing because you don't need any tools. Normally "tracefs" is mounted on /sys/kernel/debug/tracing/ [see end of this document for notes on each file/directory](#tracing-files). One prominent use case is trace_printk() which uses the tracing-kernel-ring-buffer instead of flooding your console or serial port(for a long time). MagicKey SysRq+z also prints the trace ring buffer.
 
 Second, other tools also leave their "traces" in `/sys/kernel/debug/tracing` either in automatically created new files or directories. It's *THE* central kernel tracing facility.
 
@@ -15,6 +15,8 @@ Different "tracers" all in one directory /sys/kernel/debug/tracing/:
 * [kprobes](#tracepoints): activate with kprobe_events
 
 * [uprobes](#tracepoints): activate with uprobe_events
+
+* also BPF based tracers leave their traces in these directories and output in `/sys/kernel/debug/tracing/trace and trace_pipe` if they use `bpf_trace_printk()`.
 
 Applicable to all:
 ```bash
@@ -29,7 +31,7 @@ Note: If you get `echo: write error: Device or resource busy` when activating di
 
 ## function tracer <a name="ftrace"></a>
 See [ftrace-Documentation](#documentation-ftrace) for all knobs and switches and all tracers in `available_tracers`. Will cover just function and function_graph.
-Best used in a virtual machine: tracing a lot of functions (especially with stacktraces) adds a lot of overhead.
+Best used in a virtual machine: tracing a lot of functions (especially with stacktraces) adds noticeable amount of overhead.
 
 ```
 # wc -l available_filter_functions
@@ -105,9 +107,6 @@ echo 0 > tracing_on
 cp trace /tmp/tracing.save.$$
 echo nop > current_tracer
 ```
-
-
-
 
 Output:
 ```
@@ -223,7 +222,7 @@ futex_exit_release
 As explained in the LWN article ["Secrets of the Ftrace function tracer"](#ftracesecrets) using a command like `grep sched available_filter_functions > set_ftrace_filter` which adds hundreds of filter to the `set_ftrace_filter` file will result in millions of string comparisons and might take a second or two.
 
 
-Now the output of a single `ls` is more reasonable: 8 stack traces, 89 lines with header:
+Now the output of a single `ls`, filtered on futex_* calls, is more reasonable: 8 stack traces, 89 lines with header:
 ```bash
 # tracer: function
 #
@@ -307,16 +306,16 @@ Note: `print fmt` is default string appearing in trace output
 
 Limit output to `wget`:
 ```
-echo filename == "/usr/bin/wget" > /sys/kernel/debug/tracing/events/sched/
-sched_process_exec/filter
-echo '!filename == "/usr/bin/wget"' > /sys/kernel/debug/tracing/events/sched/
-sched_process_exec/filter # disable with !
+echo filename == "/usr/bin/wget" > /sys/kernel/debug/tracing/events/sched/sched_process_exec/filter
+echo '!filename == "/usr/bin/wget"' > /sys/kernel/debug/tracing/events/sched/sched_process_exec/filter # disable with !
 ```
+(note: filename could also be `./main` if started that way, it's not automatically the full absolute path)
 
 ```bash
 echo nostacktrace     > /sys/kernel/debug/tracing/trace_options
 echo nouserstacktrace > /sys/kernel/debug/tracing/trace_options
 ```
+
 Output:
 ```
           <...>-9726  [005] .... 91860.339826: sched_process_exec: filename=/usr/bin/wget pid=9726 old_pid=9726
@@ -348,7 +347,7 @@ cat trace_pipe
 
 
 ```
-
+(note: userstacktraces might not show because most programs are compiled with omit-frame-pointer).
 
 
 Trigger files to activate other actions like histograms if a tracepoints/event is hit.
@@ -438,10 +437,11 @@ echo 1 > events/uprobes/p_bash_0xad900/enable
 
 [Function profiling](#ftracesecrets) is also possible. Copied from LWN Ftrace: "Secrets of the Ftrace function tracer" (https://lwn.net/Articles/370423/):
 
+
 ```
    [tracing]# echo nop > current_tracer
    [tracing]# echo 1 > function_profile_enabled
-   [tracing]# cat trace_stat/function0 |head
+   [tracing]# cat trace_stat/function0 |head # for CPU0
      Function                               Hit    Time            Avg
      --------                               ---    ----            ---
      schedule                             22943    1994458706 us     86931.03 us 
