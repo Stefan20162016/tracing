@@ -244,7 +244,7 @@ For more examples see the bpftrace repository: https://github.com/iovisor/bpftra
 E.g. to see LLVM intermediate representation:
 ```
 bpftrace -d LLVMIR -e 'tracepoint:syscalls:sys_exit_setpgid {printf("%s %d %d %d\n", comm, pid, args->__syscall_nr,args->ret);  }'
-``
+```
 
 
 
