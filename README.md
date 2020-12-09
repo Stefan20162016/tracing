@@ -26,7 +26,7 @@ This is more a short practical tutorial and the sections explain tracing functio
 1. [bpftrace](tracing-2_2.md)
 1. [BCC](tracing-2_3.md)
 1. [./perf](tracing-2_4.md)
-1. [LTTng SystemTap?](tracing-2_5.md)
+1. [DEMO: ebpf_exporter+prometheus+grafana](tracing-2_5.md)
 
 
 BPF features added to kernel versions(from bpftrace/INSTALL.md):
