@@ -28,6 +28,10 @@ This is more a short practical tutorial and the sections explain tracing functio
 1. [./perf](tracing-2_4.md)
 1. [DEMO: ebpf_exporter+prometheus+grafana](tracing-2_5.md)
 
+(more tools: https://github.com/guardicore/ipcdump , 
+https://falco.org/
+new relic: pixie
+https://ebpf.io/projects
 
 BPF features added to kernel versions(from bpftrace/INSTALL.md):
 - 4.1 - kprobes
